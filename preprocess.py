@@ -1,5 +1,6 @@
 
 import numpy as np
+import pickle as pkl
 from datetime import datetime
 from pathlib import Path
 
@@ -13,7 +14,7 @@ def parse_csv(csv_path:Path, fields:list=None, replace_val=np.nan):
     :@param fields: Optionally specify a subset of the fields in parsing order.
     :@param replace_val: Value to replace null entries in float fields.
     """
-    str_fields = ["station", "skyc1", "skyl1", "sknt"]
+    str_fields = ["station", "skyc1", "skyl1",]
     time_fields = ["valid"]
     all_lines = csv_path.open("r").readlines()
     labels = all_lines.pop(0).strip().split(",")
@@ -39,15 +40,38 @@ def parse_csv(csv_path:Path, fields:list=None, replace_val=np.nan):
             data.append(tuple(all_cols[idx]))
     return fields,data
 
+def get_norm_coeffs(data):
+    """
+    Calculate the mean and standard deviation of each feature
+
+    :@param data: list of uniform-size data arrays corresponding to each field
+    :@return: tuple[np.array] like (means, stdevs)
+    """
+    data = np.stack(data)
+    return (np.average(data, axis=-1), np.std(data,axis=-1))
+
 if __name__=="__main__":
     data_dir = Path("data")
     csv_path = data_dir.joinpath("AL_ASOS_July_2023.csv")
+    pkl_path = data_dir.joinpath("202306_asos_")
 
     labels,data = parse_csv(
             csv_path=csv_path,
             fields=["station", "valid", "tmpc", "dwpc", "relh", "sknt",
                     "mslp", "p01m", "gust", "romps_LCL_m", "lcl_estimate"],
-            replace_val=0,
+            replace_val=0, ## gust should be the only NaN field.
             )
-    for d in data:
-        print(d[::100])
+    stations = data.pop(labels.index("station"))
+    labels.remove("station")
+    times = data.pop(labels.index("valid"))
+    labels.remove("valid")
+    means, stdevs = get_norm_coeffs(data)
+    pkl_dict = {
+            "labels":labels,
+            "times":times,
+            "stations":stations,
+            "means":means,
+            "stdevs":stdevs,
+            "data":np.stack(data,axis=-1),
+            }
+    pkl.dump(pkl_dict,pkl_path.open("wb"))
