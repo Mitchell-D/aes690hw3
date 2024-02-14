@@ -1,0 +1,33 @@
+Model: "model"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input (InputLayer)          [(None, 7)]               0         
+                                                                 
+ ffm-0_dense_0 (Dense)       (None, 128)               1024      
+                                                                 
+ ffm-0_bnorm_0 (BatchNormali  (None, 128)              512       
+ zation)                                                         
+                                                                 
+ ffm-0_dense_1 (Dense)       (None, 128)               16512     
+                                                                 
+ ffm-0_bnorm_1 (BatchNormali  (None, 128)              512       
+ zation)                                                         
+                                                                 
+ ffm-0_dense_2 (Dense)       (None, 64)                8256      
+                                                                 
+ ffm-0_bnorm_2 (BatchNormali  (None, 64)               256       
+ zation)                                                         
+                                                                 
+ ffm-0_dense_3 (Dense)       (None, 64)                4160      
+                                                                 
+ ffm-0_bnorm_3 (BatchNormali  (None, 64)               256       
+ zation)                                                         
+                                                                 
+ output (Dense)              (None, 2)                 130       
+                                                                 
+=================================================================
+Total params: 31,618
+Trainable params: 30,850
+Non-trainable params: 768
+_________________________________________________________________
