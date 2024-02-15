@@ -11,7 +11,8 @@ def main():
     ## Preprocess the monthly data from ASOS stations
     data_dict = preprocess(
             asos_csv_path=data_dir.joinpath("AL_ASOS_July_2023.csv"),
-            input_feats=["tmpc","dwpc","relh","sknt","mslp","p01m","gust","feel"],
+            input_feats=[
+                "tmpc","dwpc","relh","sknt","mslp", "p01m","gust","feel"],
             output_feats=["romps_LCL_m","lcl_estimate"],
             normalize=False,
             )

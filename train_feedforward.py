@@ -204,31 +204,32 @@ if __name__=="__main__":
     asos_ut_path = data_dir.joinpath("UT_ASOS_Mar_2023.csv")
 
     config = {
-            "model_name":"ffm-2",
-            "input_feats":["tmpc","dwpc","relh","sknt","mslp","p01m","gust"],
+            "model_name":"ffm-4",
+            "input_feats":["tmpc","dwpc","relh","sknt",
+                "mslp","p01m","gust","feel"],
             "output_feats":["romps_LCL_m","lcl_estimate"],
             "source_csv":asos_al_path.as_posix(),
             "batch_size":32,
             "batch_buffer":4,
-            "dropout_rate":0,
+            "dropout_rate":0.2,
             "batchnorm":True,
-            "dense_kwargs":{"activation":"relu"},
-            "node_list":[64,64,64,32,32,32,16,16],
+            "dense_kwargs":{"activation":"sigmoid"},
+            "node_list":[256,256,128,128,64,64,64,32,32,32,16,16],
             "loss":"mse",
             "metrics":["mse", "mae"],
             "max_epochs":128, ## maximum number of epochs to train
             "train_steps_per_epoch":16, ## number of batches per epoch
             "val_steps_per_epoch":3, ## number of batches per validation
             "val_frequency":1, ## epochs between validation
-            "learning_rate":1e-4,
-            "early_stop_metric":"loss", ## metric evaluated for stagnation
+            "learning_rate":1e-5,
+            "early_stop_metric":"val_mse", ## metric evaluated for stagnation
             "early_stop_patience":30, ## number of epochs before stopping
-            "mask_pct":.2,
-            "mask_pct_stdev":.4,
+            "mask_pct":.35,
+            "mask_pct_stdev":.6,
             "mask_val":9999.,
             "train_val_ratio":.65,
             "mask_feat_probs":None,
-            "notes":"Moderate masking; very deep",
+            "notes":"Huge model;strong masking;sigmoid activation;dropout;slower learning rate",
             }
 
     from preprocess import preprocess

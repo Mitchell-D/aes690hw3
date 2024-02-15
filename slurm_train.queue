@@ -23,9 +23,9 @@
 ###SBATCH -p shared --gres=gpu:rtx5000:1
 #SBATCH -p shared --gres=gpu:1
 
-#SBATCH -J ffm-2_train
-#SBATCH -o /rhome/mdodson/aes690hw3/data/slurm/slurm_train_ffm-2.out ## STDOUT
-#SBATCH -e /rhome/mdodson/aes690hw3/data/slurm/slurm_train_ffm-2.err ## STDERR
+#SBATCH -J ffm-4_train
+#SBATCH -o /rhome/mdodson/aes690hw3/data/slurm/slurm_train_ffm-4.out ## STDOUT
+#SBATCH -e /rhome/mdodson/aes690hw3/data/slurm/slurm_train_ffm-4.err ## STDERR
 
 module load cuda/11.0
 $CUDA_PATH /samples/bin/x86_64/linux/release/deviceQuery
