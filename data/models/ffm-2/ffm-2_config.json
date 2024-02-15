@@ -1,5 +1,5 @@
 {
-    "model_name": "ffm-0",
+    "model_name": "ffm-2",
     "input_feats": [
         "tmpc",
         "dwpc",
@@ -22,9 +22,13 @@
         "activation": "relu"
     },
     "node_list": [
-        512,
-        256,
-        128,
+        64,
+        64,
+        64,
+        32,
+        32,
+        32,
+        16,
         16
     ],
     "loss": "mse",
@@ -44,5 +48,5 @@
     "mask_val": 9999.0,
     "train_val_ratio": 0.65,
     "mask_feat_probs": null,
-    "notes": "Moderate masking; very wide model"
+    "notes": "Moderate masking; very deep"
 }

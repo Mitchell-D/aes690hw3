@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from random import random
 import pickle as pkl
 import json
@@ -82,7 +83,7 @@ def feedforward(name:str, node_list:list, num_inputs:int, num_outputs:int,
     return model
 
 def gen_noisy(X, Y, noise_pct=0, noise_stdev=0, mask_val=9999.,
-              feat_probs:np.array=None, shuffle=True):
+              feat_probs:np.array=None, shuffle=True, rand_seed=None):
     """
     Generates (X, Y, sample_weight) triplets for training a model with maskable
     feature values. The percentage of masked values determines the weight.
@@ -114,6 +115,7 @@ def gen_noisy(X, Y, noise_pct=0, noise_stdev=0, mask_val=9999.,
     ## Shuffle along the sample axis, if requested.
     if shuffle:
         rand_idxs = np.arange(num_samples)
+        np.random.seed(rand_seed)
         np.random.shuffle(rand_idxs)
         X = X[rand_idxs]
         Y = Y[rand_idxs]
@@ -124,23 +126,23 @@ def gen_noisy(X, Y, noise_pct=0, noise_stdev=0, mask_val=9999.,
     noise_dist = np.random.normal(noise_pct,noise_stdev,size=num_samples)
     mask_count = np.rint(np.clip(noise_dist,0,1)*num_feats).astype(int)
     feat_idxs = np.arange(num_feats).astype(int)
-    ## Choose indeces that will be masked
+    ##(!!!) The feature dimension is always assumed to be the final one (!!!)##
     for i in range(num_samples):
+        ## Choose indeces that will be masked in each sample
         mask_idxs = np.random.choice(
                 feat_idxs,
                 size=mask_count[i],
                 replace=False,
                 #p=feat_probs,
                 )
-    ##(!!!) The feature dimension is always assumed to be the final one (!!!)##
-    X[...,mask_idxs] = mask_val
+        X[i,...,mask_idxs] = mask_val
     weights = 1-mask_count/num_feats
     for i in range(num_samples):
         yield (X[i], Y[i], weights[i])
 
 def get_generators(X, Y, tv_ratio=.8, noise_pct=0, noise_stdev=0,
                    mask_val=9999., feat_probs:np.array=None, shuffle=True,
-                   dtype=tf.float64):
+                   rand_seed=None, dtype=tf.float64):
     """
     Get training and validation dataset generators for 3-tuples like (x,y,w)
     for input x, true output y, and sample weight w. Optionally use a random
@@ -165,6 +167,7 @@ def get_generators(X, Y, tv_ratio=.8, noise_pct=0, noise_stdev=0,
     assert Y.shape[0] == num_samples
     if shuffle:
         rand_idxs = np.arange(num_samples)
+        np.random.seed(rand_seed)
         np.random.shuffle(rand_idxs)
         X = X[rand_idxs]
         Y = Y[rand_idxs]
@@ -183,12 +186,12 @@ def get_generators(X, Y, tv_ratio=.8, noise_pct=0, noise_stdev=0,
         feat_probs = np.full(shape=(num_feats,), fill_value=1.)
     gen_train = tf.data.Dataset.from_generator(
             gen_noisy,
-            args=(Tx,Ty,noise_pct,noise_stdev,mask_val,feat_probs,shuffle),
+            args=(Tx,Ty,noise_pct,noise_stdev,mask_val, feat_probs, shuffle),
             output_signature=out_sig,
             )
     gen_val = tf.data.Dataset.from_generator(
             gen_noisy,
-            args=(Vx,Vy,noise_pct,noise_stdev,mask_val,feat_probs,shuffle),
+            args=(Vx,Vy,noise_pct,noise_stdev,mask_val, feat_probs, shuffle),
             output_signature=out_sig,
             )
     return gen_train,gen_val
@@ -201,7 +204,7 @@ if __name__=="__main__":
     asos_ut_path = data_dir.joinpath("UT_ASOS_Mar_2023.csv")
 
     config = {
-            "model_name":"ffm-0",
+            "model_name":"ffm-2",
             "input_feats":["tmpc","dwpc","relh","sknt","mslp","p01m","gust"],
             "output_feats":["romps_LCL_m","lcl_estimate"],
             "source_csv":asos_al_path.as_posix(),
@@ -210,7 +213,7 @@ if __name__=="__main__":
             "dropout_rate":0,
             "batchnorm":True,
             "dense_kwargs":{"activation":"relu"},
-            "node_list":[128,128,64,64],
+            "node_list":[64,64,64,32,32,32,16,16],
             "loss":"mse",
             "metrics":["mse", "mae"],
             "max_epochs":128, ## maximum number of epochs to train
@@ -220,12 +223,12 @@ if __name__=="__main__":
             "learning_rate":1e-4,
             "early_stop_metric":"loss", ## metric evaluated for stagnation
             "early_stop_patience":30, ## number of epochs before stopping
-            "mask_pct":.15,
-            "mask_pct_stdev":.1,
+            "mask_pct":.2,
+            "mask_pct_stdev":.4,
             "mask_val":9999.,
             "train_val_ratio":.65,
             "mask_feat_probs":None,
-            "notes":"Masking",
+            "notes":"Moderate masking; very deep",
             }
 
     from preprocess import preprocess
@@ -269,6 +272,17 @@ if __name__=="__main__":
             metrics=config["metrics"],
             )
     ## Define callbacks for model progress tracking
+    gT,gV = get_generators(
+            X=data_dict["X"],
+            Y=data_dict["Y"],
+            tv_ratio=config["train_val_ratio"],
+            noise_pct=config["mask_pct"],
+            noise_stdev=config["mask_pct_stdev"],
+            mask_val=config["mask_val"],
+            feat_probs=config["mask_feat_probs"],
+            shuffle=True,
+            dtype=tf.float64
+            )
     callbacks = [
             tf.keras.callbacks.EarlyStopping(
                 monitor=config["early_stop_metric"],
@@ -284,17 +298,6 @@ if __name__=="__main__":
                 model_dir.joinpath(f"{config['model_name']}_prog.csv"),
                 )
             ]
-    gT,gV = get_generators(
-            X=data_dict["X"],
-            Y=data_dict["Y"],
-            tv_ratio=config["train_val_ratio"],
-            noise_pct=config["mask_pct"],
-            noise_stdev=config["mask_pct_stdev"],
-            mask_val=config["mask_val"],
-            feat_probs=config["mask_feat_probs"],
-            shuffle=True,
-            dtype=tf.float64
-            )
     ## Train the model on the generated tensors
     hist = model.fit(
             gT.batch(config["batch_size"]).prefetch(config["batch_buffer"]),
