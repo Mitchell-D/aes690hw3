@@ -1,0 +1,50 @@
+{
+    "model_name": "ff-4",
+    "input_feats": [
+        "tmpc",
+        "relh",
+        "mslp"
+    ],
+    "output_feats": [
+        "romps_LCL_m",
+        "lcl_estimate"
+    ],
+    "source_csv": "data/AL_ASOS_July_2023.csv",
+    "batch_size": 64,
+    "batch_buffer": 4,
+    "dropout_rate": 0.1,
+    "batchnorm": true,
+    "dense_kwargs": {
+        "activation": "sigmoid"
+    },
+    "node_list": [
+        64,
+        32,
+        32,
+        32,
+        16,
+        16
+    ],
+    "loss": "mse",
+    "metrics": [
+        "mse",
+        "mae"
+    ],
+    "max_epochs": 128,
+    "train_steps_per_epoch": 16,
+    "weighted_metrics": [
+        "mae",
+        "mse"
+    ],
+    "val_steps_per_epoch": 3,
+    "val_frequency": 1,
+    "learning_rate": 1e-05,
+    "early_stop_metric": "val_mse",
+    "early_stop_patience": 30,
+    "mask_pct": 0,
+    "mask_pct_stdev": 0,
+    "mask_val": 9999.0,
+    "train_val_ratio": 0.8,
+    "mask_feat_probs": null,
+    "notes": "Basic model ; Only key parameters ; some dropout"
+}

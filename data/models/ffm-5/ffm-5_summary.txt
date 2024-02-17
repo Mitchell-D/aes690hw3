@@ -1,0 +1,43 @@
+Model: "model"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input (InputLayer)          [(None, 8)]               0         
+                                                                 
+ ffm-5_dense_0 (Dense)       (None, 64)                576       
+                                                                 
+ ffm-5_bnorm_0 (BatchNormali  (None, 64)               256       
+ zation)                                                         
+                                                                 
+ ffm-5_dense_1 (Dense)       (None, 32)                2080      
+                                                                 
+ ffm-5_bnorm_1 (BatchNormali  (None, 32)               128       
+ zation)                                                         
+                                                                 
+ ffm-5_dense_2 (Dense)       (None, 32)                1056      
+                                                                 
+ ffm-5_bnorm_2 (BatchNormali  (None, 32)               128       
+ zation)                                                         
+                                                                 
+ ffm-5_dense_3 (Dense)       (None, 32)                1056      
+                                                                 
+ ffm-5_bnorm_3 (BatchNormali  (None, 32)               128       
+ zation)                                                         
+                                                                 
+ ffm-5_dense_4 (Dense)       (None, 16)                528       
+                                                                 
+ ffm-5_bnorm_4 (BatchNormali  (None, 16)               64        
+ zation)                                                         
+                                                                 
+ ffm-5_dense_5 (Dense)       (None, 16)                272       
+                                                                 
+ ffm-5_bnorm_5 (BatchNormali  (None, 16)               64        
+ zation)                                                         
+                                                                 
+ output (Dense)              (None, 2)                 34        
+                                                                 
+=================================================================
+Total params: 6,370
+Trainable params: 5,986
+Non-trainable params: 384
+_________________________________________________________________

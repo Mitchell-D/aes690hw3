@@ -1,0 +1,113 @@
+Model: "model"
+__________________________________________________________________________________________________
+ Layer (type)                   Output Shape         Param #     Connected to                     
+==================================================================================================
+ ved-0_input (InputLayer)       [(None, 8)]          0           []                               
+                                                                                                  
+ ved-0_enc_dense_0 (Dense)      (None, 64)           576         ['ved-0_input[0][0]']            
+                                                                                                  
+ ved-0_enc_bnorm_0 (BatchNormal  (None, 64)          256         ['ved-0_enc_dense_0[0][0]']      
+ ization)                                                                                         
+                                                                                                  
+ ved-0_enc_dense_1 (Dense)      (None, 64)           4160        ['ved-0_enc_bnorm_0[0][0]']      
+                                                                                                  
+ ved-0_enc_bnorm_1 (BatchNormal  (None, 64)          256         ['ved-0_enc_dense_1[0][0]']      
+ ization)                                                                                         
+                                                                                                  
+ ved-0_enc_dense_2 (Dense)      (None, 32)           2080        ['ved-0_enc_bnorm_1[0][0]']      
+                                                                                                  
+ ved-0_enc_bnorm_2 (BatchNormal  (None, 32)          128         ['ved-0_enc_dense_2[0][0]']      
+ ization)                                                                                         
+                                                                                                  
+ ved-0_enc_dense_3 (Dense)      (None, 32)           1056        ['ved-0_enc_bnorm_2[0][0]']      
+                                                                                                  
+ ved-0_enc_bnorm_3 (BatchNormal  (None, 32)          128         ['ved-0_enc_dense_3[0][0]']      
+ ization)                                                                                         
+                                                                                                  
+ ved-0_enc_dense_4 (Dense)      (None, 16)           528         ['ved-0_enc_bnorm_3[0][0]']      
+                                                                                                  
+ ved-0_enc_bnorm_4 (BatchNormal  (None, 16)          64          ['ved-0_enc_dense_4[0][0]']      
+ ization)                                                                                         
+                                                                                                  
+ ved-0_enc_dense_5 (Dense)      (None, 16)           272         ['ved-0_enc_bnorm_4[0][0]']      
+                                                                                                  
+ ved-0_enc_bnorm_5 (BatchNormal  (None, 16)          64          ['ved-0_enc_dense_5[0][0]']      
+ ization)                                                                                         
+                                                                                                  
+ ved-0_mean (Dense)             (None, 16)           272         ['ved-0_enc_bnorm_5[0][0]']      
+                                                                                                  
+ ved-0_logvar (Dense)           (None, 16)           272         ['ved-0_enc_bnorm_5[0][0]']      
+                                                                                                  
+ tf.math.multiply (TFOpLambda)  (None, 16)           0           ['ved-0_logvar[0][0]']           
+                                                                                                  
+ tf.compat.v1.shape (TFOpLambda  (2,)                0           ['ved-0_mean[0][0]']             
+ )                                                                                                
+                                                                                                  
+ tf.math.exp (TFOpLambda)       (None, 16)           0           ['tf.math.multiply[0][0]']       
+                                                                                                  
+ tf.random.normal (TFOpLambda)  (None, 16)           0           ['tf.compat.v1.shape[0][0]']     
+                                                                                                  
+ tf.math.multiply_1 (TFOpLambda  (None, 16)          0           ['tf.math.exp[0][0]',            
+ )                                                                'tf.random.normal[0][0]']       
+                                                                                                  
+ tf.__operators__.add (TFOpLamb  (None, 16)          0           ['ved-0_mean[0][0]',             
+ da)                                                              'tf.math.multiply_1[0][0]']     
+                                                                                                  
+ ved-0_dec_dense_0 (Dense)      (None, 16)           272         ['tf.__operators__.add[0][0]']   
+                                                                                                  
+ ved-0_dec_bnorm_0 (BatchNormal  (None, 16)          64          ['ved-0_dec_dense_0[0][0]']      
+ ization)                                                                                         
+                                                                                                  
+ ved-0_dec_dense_1 (Dense)      (None, 16)           272         ['ved-0_dec_bnorm_0[0][0]']      
+                                                                                                  
+ ved-0_dec_bnorm_1 (BatchNormal  (None, 16)          64          ['ved-0_dec_dense_1[0][0]']      
+ ization)                                                                                         
+                                                                                                  
+ ved-0_dec_dense_2 (Dense)      (None, 32)           544         ['ved-0_dec_bnorm_1[0][0]']      
+                                                                                                  
+ ved-0_dec_bnorm_2 (BatchNormal  (None, 32)          128         ['ved-0_dec_dense_2[0][0]']      
+ ization)                                                                                         
+                                                                                                  
+ ved-0_dec_dense_3 (Dense)      (None, 32)           1056        ['ved-0_dec_bnorm_2[0][0]']      
+                                                                                                  
+ ved-0_dec_bnorm_3 (BatchNormal  (None, 32)          128         ['ved-0_dec_dense_3[0][0]']      
+ ization)                                                                                         
+                                                                                                  
+ ved-0_dec_dense_4 (Dense)      (None, 64)           2112        ['ved-0_dec_bnorm_3[0][0]']      
+                                                                                                  
+ ved-0_dec_bnorm_4 (BatchNormal  (None, 64)          256         ['ved-0_dec_dense_4[0][0]']      
+ ization)                                                                                         
+                                                                                                  
+ ved-0_dec_dense_5 (Dense)      (None, 64)           4160        ['ved-0_dec_bnorm_4[0][0]']      
+                                                                                                  
+ ved-0_dec_bnorm_5 (BatchNormal  (None, 64)          256         ['ved-0_dec_dense_5[0][0]']      
+ ization)                                                                                         
+                                                                                                  
+ ved-0_out (Dense)              (None, 2)            130         ['ved-0_dec_bnorm_5[0][0]']      
+                                                                                                  
+ tf.math.square (TFOpLambda)    (None, 16)           0           ['ved-0_mean[0][0]']             
+                                                                                                  
+ tf.math.subtract (TFOpLambda)  (None, 16)           0           ['ved-0_logvar[0][0]',           
+                                                                  'tf.math.square[0][0]']         
+                                                                                                  
+ tf.math.exp_1 (TFOpLambda)     (None, 16)           0           ['ved-0_logvar[0][0]']           
+                                                                                                  
+ tf.math.subtract_1 (TFOpLambda  (None, 16)          0           ['tf.math.subtract[0][0]',       
+ )                                                                'tf.math.exp_1[0][0]']          
+                                                                                                  
+ tf.__operators__.add_1 (TFOpLa  (None, 16)          0           ['tf.math.subtract_1[0][0]']     
+ mbda)                                                                                            
+                                                                                                  
+ tf.math.reduce_mean (TFOpLambd  ()                  0           ['tf.__operators__.add_1[0][0]'] 
+ a)                                                                                               
+                                                                                                  
+ tf.math.multiply_2 (TFOpLambda  ()                  0           ['tf.math.reduce_mean[0][0]']    
+ )                                                                                                
+                                                                                                  
+ add_loss (AddLoss)             ()                   0           ['tf.math.multiply_2[0][0]']     
+                                                                                                  
+==================================================================================================
+Total params: 19,554
+Trainable params: 18,658
+Non-trainable params: 896
+__________________________________________________________________________________________________

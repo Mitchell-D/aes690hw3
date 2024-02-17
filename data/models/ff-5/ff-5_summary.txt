@@ -1,0 +1,55 @@
+Model: "model"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input (InputLayer)          [(None, 3)]               0         
+                                                                 
+ ff-5_dense_0 (Dense)        (None, 64)                256       
+                                                                 
+ ff-5_bnorm_0 (BatchNormaliz  (None, 64)               256       
+ ation)                                                          
+                                                                 
+ dropout (Dropout)           (None, 64)                0         
+                                                                 
+ ff-5_dense_1 (Dense)        (None, 32)                2080      
+                                                                 
+ ff-5_bnorm_1 (BatchNormaliz  (None, 32)               128       
+ ation)                                                          
+                                                                 
+ dropout_1 (Dropout)         (None, 32)                0         
+                                                                 
+ ff-5_dense_2 (Dense)        (None, 32)                1056      
+                                                                 
+ ff-5_bnorm_2 (BatchNormaliz  (None, 32)               128       
+ ation)                                                          
+                                                                 
+ dropout_2 (Dropout)         (None, 32)                0         
+                                                                 
+ ff-5_dense_3 (Dense)        (None, 32)                1056      
+                                                                 
+ ff-5_bnorm_3 (BatchNormaliz  (None, 32)               128       
+ ation)                                                          
+                                                                 
+ dropout_3 (Dropout)         (None, 32)                0         
+                                                                 
+ ff-5_dense_4 (Dense)        (None, 16)                528       
+                                                                 
+ ff-5_bnorm_4 (BatchNormaliz  (None, 16)               64        
+ ation)                                                          
+                                                                 
+ dropout_4 (Dropout)         (None, 16)                0         
+                                                                 
+ ff-5_dense_5 (Dense)        (None, 16)                272       
+                                                                 
+ ff-5_bnorm_5 (BatchNormaliz  (None, 16)               64        
+ ation)                                                          
+                                                                 
+ dropout_5 (Dropout)         (None, 16)                0         
+                                                                 
+ output (Dense)              (None, 2)                 34        
+                                                                 
+=================================================================
+Total params: 6,050
+Trainable params: 5,666
+Non-trainable params: 384
+_________________________________________________________________
