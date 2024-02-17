@@ -18,6 +18,7 @@ from tensorflow.keras.regularizers import L2
 from tensorflow.keras import Input, Model
 
 import model_methods as mm
+from VED import VED
 
 #os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 #'''
@@ -31,14 +32,14 @@ if len(gpus):
     tf.config.experimental.set_memory_growth(gpus[0], True)
 #'''
 
-def train_variational(X, Y, model_config, model_dir):
+def train_ved(X, Y, model_config, model_dir):
     """
     Train a variational model according to a config dictionary with the keys:
 
     "model_name": unique
     "input_feats": subset of ASOS features to use as network inputs
     "output_feats": subset of ASOS features to predict with the network
-    "num_latent": Number of posterior-approximating gaussian distriubtions
+    "latent_size": Number of posterior-approximating gaussian distriubtions
     "source_csv": string path to a ASOS monthly csv file
     "batch_size": int minibatch size (samples per weight update)
     "batch_buffer": int num of batches to preload in memory from the generator
@@ -81,18 +82,19 @@ def train_variational(X, Y, model_config, model_dir):
     assert X.shape[-1] == len(config["input_feats"])
     assert Y.shape[-1] == len(config["output_feats"])
     ## Initialize the model according to the configuration
-    model = mm.variational_encoder_decoder(
+    model = VED(
             name=config["model_name"],
             num_inputs=len(config["input_feats"]),
             num_outputs=len(config["output_feats"]),
-            num_latent=config["num_latent"],
+            num_latent=config["latent_size"],
             enc_node_list=config["enc_node_list"],
             dec_node_list=config["dec_node_list"],
-            batchnorm=config["batchnorm"],
             dropout_rate=config["dropout_rate"],
+            batchnorm=config["batchnorm"],
             enc_dense_kwargs=config["enc_dense_kwargs"],
             dec_dense_kwargs=config["dec_dense_kwargs"],
             )
+    #model.build()
 
     ## Create and add some information to the dedicated model directory
     model_dir = model_parent_dir.joinpath(config["model_name"])
@@ -111,7 +113,6 @@ def train_variational(X, Y, model_config, model_dir):
     model.compile(
             optimizer=tf.keras.optimizers.Adam(
                 learning_rate=config["learning_rate"]),
-            loss=config.get("loss"),
             metrics=config.get("metrics"),
             weighted_metrics=config.get("weighted_metrics"),
             )
@@ -139,7 +140,8 @@ def train_variational(X, Y, model_config, model_dir):
                 monitor="val_loss",
                 save_best_only=True,
                 filepath=model_dir.joinpath(
-                    config['model_name']+"_{epoch:03}_{val_mae:.03f}.hdf5")
+                    config['model_name']+"_{epoch:03}_{val_mae:.03f}.hdf5"),
+                save_weights_only=config["save_weights_only"],
                 ),
             tf.keras.callbacks.CSVLogger(
                 model_dir.joinpath(f"{config['model_name']}_prog.csv"),
@@ -169,7 +171,8 @@ def train_variational(X, Y, model_config, model_dir):
         key=lambda p:int(p.stem.split("_")[1])
         )).pop(-1)
     ## Save the model after further training without improvement
-    model.save(model_dir.joinpath(config["model_name"]+"_keras.hdf5"))
+    ## weights only since custom subclass of Model
+    model.save_weights(model_dir.joinpath(config["model_name"]+"_keras.hdf5"))
     ## Save the previous best-performing model from the last checkpoint
     best_model.rename(model_dir.joinpath(config["model_name"]+"_final.hdf5"))
 
@@ -180,20 +183,17 @@ if __name__=="__main__":
     asos_al_path = data_dir.joinpath("AL_ASOS_July_2023.csv")
     asos_ut_path = data_dir.joinpath("UT_ASOS_Mar_2023.csv")
     config = {
-            "model_name":"ved-3",
-            "input_feats":["tmpc","dwpc","relh","sknt",
-                "mslp","p01m","gust","feel"],
+            "model_name":"ved-5",
+            "input_feats":["tmpc","relh","sknt","mslp"],
             "output_feats":["romps_LCL_m","lcl_estimate"],
             "source_csv":asos_al_path.as_posix(),
             "batch_size":32,
             "batch_buffer":4,
             "dropout_rate":0.0,
             "batchnorm":True,
-            "dense_kwargs":{"activation":"sigmoid"},
             "enc_node_list":[128,128,128,64,32],
-            "num_latent":8,
+            "latent_size":8,
             "dec_node_list":[32,64,64,16],
-            "loss":"mse",
             "metrics":["mse", "mae"],
             "enc_dense_kwargs":{"activation":"relu"},
             "dec_dense_kwargs":{"activation":"relu"},
@@ -202,7 +202,7 @@ if __name__=="__main__":
             "train_steps_per_epoch":16, ## number of batches per epoch
             "val_steps_per_epoch":3, ## number of batches per validation
             "val_frequency":1, ## epochs between validation
-            "learning_rate":1e-2,
+            "learning_rate":1e-4,
             "early_stop_metric":"val_mse", ## metric evaluated for stagnation
             "early_stop_patience":30, ## number of epochs before stopping
             "mask_pct":0,
@@ -210,7 +210,8 @@ if __name__=="__main__":
             "mask_val":9999.,
             "train_val_ratio":.8,
             "mask_feat_probs":None,
-            "notes":"Same architecture; NO MASKING; very fast learning rate",
+            "save_weights_only":True,
+            "notes":"Same as ved-4, but reduced input features & learning rate",
             }
 
     from preprocess import preprocess
@@ -221,9 +222,9 @@ if __name__=="__main__":
             normalize=True,
             )
 
-    train_variational(
-            X=data_dict["X"],
-            Y=data_dict["Y"],
+    train_ved(
+            X=data_dict["X"].astype(np.float64),
+            Y=data_dict["Y"].astype(np.float64),
             model_config=config,
             model_dir=model_parent_dir,
             )

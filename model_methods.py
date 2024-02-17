@@ -20,33 +20,6 @@ def_dense_kwargs = {
         "bias_constraint":None,
         }
 
-def load_config(model_dir):
-    """
-    Load the configuration JSON associated with a specific model.
-
-    :@param model_dir: The directory associated with a specific model instance
-        which contains a {model_name}_config.json describing its hyperparams.
-    """
-    model_name = model_dir.name
-    return json.load(model_dir.joinpath(f"{model_name}_config.json").open("r"))
-
-def load_csv_prog(model_dir):
-    """
-    Load the per-epoch metrics from a tensorflow CSVLogger file as a dict.
-
-    :@param model_dir: The directory associated with a specific model instance
-        which contains a {model_name}_prog.csv describing its hyperparams.
-    """
-    cfg = load_config(model_dir)
-    csv_path = model_dir.joinpath(f"{cfg['model_name']}_prog.csv")
-    csv_lines = csv_path.open("r").readlines()
-    csv_lines = list(map(lambda l:l.strip().split(","), csv_lines))
-    csv_labels = csv_lines.pop(0)
-    csv_cols = list(map(
-        lambda l:np.asarray([float(v) for v in l]),
-        zip(*csv_lines)))
-    return dict(zip(csv_labels, csv_cols))
-
 def get_dense_stack(name:str, layer_input:Layer, node_list:list,
         batchnorm=True, dropout_rate=0.0, dense_kwargs={}):
     """
@@ -73,13 +46,24 @@ def kl_divergence(z_mean, z_log_var):
             z_log_var - tf.square(z_mean) - tf.exp(z_log_var) + 1
             ) * -0.5
 
-def get_vi_projection(name:str, layer_input, latent_size:int):
+def get_vi_projection(name:str, layer_input, num_latent:int):
     """
+    Use a single feedforward layer to project the input to a num_latent
+    dimensional mean and log variance parameters of the latent distributions.
+
+    Return the parameters, and the latent vector sampled from the distribution.
+
+    :@param layer_input: Input tensorflow Layer
+    :@param num_latent: Number of latent distributions sampled, and as such
+        the size of this layer's output.
+
+    :@param return: 3-tuple (sample,z_mean,z_log_var) containing the sample,
+        and the latent distributions' means and standard deviations.
     """
     ## Project to requested latent dimension for predicted mean and variance
-    z_mean = Dense(latent_size, name=f"{name}_mean",
+    z_mean = Dense(num_latent, name=f"{name}_mean",
                    activation="linear")(layer_input)
-    z_log_var = Dense(latent_size, name=f"{name}_logvar",
+    z_log_var = Dense(num_latent, name=f"{name}_logvar",
                       activation="linear")(layer_input)
     ## Draw a sample from the distribution from predicted parameters
     ## shaped like (B,L) for B batch elements and L latent features.
@@ -101,17 +85,17 @@ class KL_Divergence(Layer):
 '''
 
 def variational_encoder_decoder(
-        name:str, num_inputs:int, num_outputs:int, latent_size:int,
+        name:str, num_inputs:int, num_outputs:int, num_latent:int,
         enc_node_list, dec_node_list, dropout_rate=0.0, batchnorm=True,
         enc_dense_kwargs={}, dec_dense_kwargs={}):
     """
-    Construct a variational encoder decoder model parameterized by latent_size
+    Construct a variational encoder decoder model parameterized by num_latent
     gaussian distributions approximating the latent posterior p(z|x) of input x
 
     :@param name: Model name for layer labeling
     :@param num_inputs: Number of inputs to the model
     :@param num_outputs: Number of values predicted by the model
-    :@param latent_size: Number of latent distributions.
+    :@param num_latent: Number of latent distributions.
     :@param enc_node_list: List of int node counts per layer in the encoder
     :@param dec_node_list: List of int node counts per layer in the decoder
     :@param dropout_rate: Dropout rate in [0,1]
@@ -133,7 +117,7 @@ def variational_encoder_decoder(
     sample,z_mean,z_log_var = get_vi_projection(
             name=name,
             layer_input=l_enc_dense,
-            latent_size=latent_size,
+            num_latent=num_latent,
             )
     l_decoder = get_dense_stack(
             name=f"{name}_dec",
@@ -286,7 +270,7 @@ if __name__=="__main__":
     ved = get_ved(
             num_inputs=10,
             num_outputs=2,
-            latent_size=8,
+            num_latent=8,
             enc_node_list=[16,32,64,64,32],
             dec_node_list=[32,64,64,32,16],
             dropout_rate=0.0,
