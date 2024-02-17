@@ -130,7 +130,7 @@ def train_feedforward(X, Y, model_config, model_dir):
                 monitor="val_loss",
                 save_best_only=True,
                 filepath=model_dir.joinpath(
-                    config['model_name']+"_{epoch}_{val_mae:.02f}.hdf5")
+                    config['model_name']+"_{epoch:03}_{val_mae:.03f}.hdf5")
                 ),
             tf.keras.callbacks.CSVLogger(
                 model_dir.joinpath(f"{config['model_name']}_prog.csv"),
