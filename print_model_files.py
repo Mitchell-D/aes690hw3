@@ -13,7 +13,8 @@ git add -f `python print_model_files.py`
 from pathlib import Path
 from itertools import chain
 
-substrings = ["_config.json", "_summary.txt", "_final.hdf5", "_prog.csv"]
+substrings = ["_config.json", "_summary.txt", "_final.hdf5",
+              "_prog.csv", "_final.weights.hdf5"]
 model_dir = Path("data/models")
 model_files = list(chain(*[
     list(m.iterdir()) for m in model_dir.iterdir() if m.is_dir()

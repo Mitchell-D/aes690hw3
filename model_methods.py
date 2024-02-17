@@ -210,11 +210,12 @@ def gen_noisy(X, Y, noise_pct=0, noise_stdev=0, mask_val=9999.,
     for i in range(num_samples):
         yield (X[i], Y[i], weights[i])
 
-def get_generators(X, Y, tv_ratio=.8, noise_pct=0, noise_stdev=0,
-                   mask_val=9999., feat_probs:np.array=None, shuffle=True,
-                   rand_seed=None, dtype=tf.float64):
+def array_to_noisy_tv_gen(
+        X, Y, tv_ratio=.8, noise_pct=0, noise_stdev=0, mask_val=9999.,
+        feat_probs:np.array=None, shuffle=True, rand_seed=None,
+        dtype=tf.float64):
     """
-    Get training and validation dataset generators for 3-tuples like (x,y,w)
+    Get training and validation dataset generators returning  3-tuples (x,y,w)
     for input x, true output y, and sample weight w. Optionally use a random
     masking strategy to corrupt a subset of the features, adjusting the sample
     weight proportional to the percentage of values that were masked.
@@ -231,27 +232,31 @@ def get_generators(X, Y, tv_ratio=.8, noise_pct=0, noise_stdev=0,
         provides the relative probabilities of each feature being selected to
         be masked. Uniform by default.
     :@param shuffle: if True, randomly shuffles samples along the first axis.
+
+    :@return: 2-tuple (training_generator, validation_generator) of
+        tf.data.Dataset generators which can be functionally iterated on.
     """
     num_samples = X.shape[0]
     num_feats = X.shape[-1]
     assert Y.shape[0] == num_samples
+    ## Shuffle the samples if requested
     if shuffle:
         rand_idxs = np.arange(num_samples)
         np.random.seed(rand_seed)
         np.random.shuffle(rand_idxs)
         X = X[rand_idxs]
         Y = Y[rand_idxs]
-        split_idx = np.array([int(tv_ratio*num_samples)])
+    ## split the samples into training and validation sets
+    split_idx = np.array([int(tv_ratio*num_samples)])
     Tx,Vx = np.split(X, split_idx)
     Ty,Vy = np.split(Y, split_idx)
-    out_sig = tf.TensorSpec(shape=Y.shape, dtype=dtype)
-    #'''
+    ## Establish the generator output signature
     out_sig = (
             tf.TensorSpec(shape=Tx.shape[1:],dtype=dtype),
             tf.TensorSpec(shape=Ty.shape[1:], dtype=dtype),
             tf.TensorSpec(shape=tuple(), dtype=dtype),
             )
-    #'''
+    ## Init the training and validation Datasets with gen_noisy generators
     if feat_probs is None:
         feat_probs = np.full(shape=(num_feats,), fill_value=1.)
     gen_train = tf.data.Dataset.from_generator(
@@ -264,6 +269,7 @@ def get_generators(X, Y, tv_ratio=.8, noise_pct=0, noise_stdev=0,
             args=(Vx,Vy,noise_pct,noise_stdev,mask_val, feat_probs, shuffle),
             output_signature=out_sig,
             )
+    ## return tf.data.Dataset generators as a 2-tuple (training, validation)
     return gen_train,gen_val
 
 if __name__=="__main__":

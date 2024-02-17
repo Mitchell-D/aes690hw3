@@ -34,11 +34,11 @@ class ModelDir:
                 if (f.name.split("_")[0]==self.name and not f.is_dir())
                 ]
         self.req_files = (
-                self.dir.joinpath(f"{self.name}_prog.csv"),
                 self.dir.joinpath(f"{self.name}_summary.txt"),
                 self.dir.joinpath(f"{self.name}_config.json"),
                 )
-        self.path_prog, self.path_summary,self.path_config = self.req_files
+        self.path_summary,self.path_config = self.req_files
+        self.path_prog = self.dir.joinpath(f"{self.name}_prog.csv")
         self._check_req_files()
         self._prog = None
         self._summary = None
@@ -67,10 +67,10 @@ class ModelDir:
     def config(self):
         """ Returns the model config dictionary.  """
         if self._config == None:
-            self._ = self._load_config()
+            self._config = self._load_config()
         return self._config
 
-    def get_metric(metric):
+    def get_metric(self, metric):
         """"
         Returns the per-epoch metric data array for one or more metrics.
 
@@ -91,7 +91,8 @@ class ModelDir:
 
     def _check_req_files(self):
         """
-        Validate that all required files exist in the model directory
+        Verify that all files created by the build() function exist in the
+        model directory (ie _summary.txt and _config.json).
         """
         try:
             assert all(f.exists() for f in self.req_files)
@@ -104,7 +105,15 @@ class ModelDir:
     def load_prog(self, as_array=False):
         """
         Load the training progress csv from a keras CSVLogger
+
+        :@param: if True, loads progress lists as a single (E,M) ndarray
+            for E epochs evaluated with M metrics
         """
+        if self.path_prog is None:
+            raise ValueError(
+                    "Cannot return progress csv. "
+                    f"File not found: {self.path_prog.as_posix()}"
+                    )
         return load_csv_prog(self.path_prog, as_array=as_array)
 
     def _load_config(self):
@@ -113,6 +122,26 @@ class ModelDir:
         """
         self._config = json.load(self.path_config.open("r"))
         return self._config
+
+    def update_config(self, update_dict:dict):
+        """
+        Update the config json to have the new keys, replacing any that exist.
+
+        Overwrites and reloads the json configuration file.
+
+        :@param update_dict: dict mapping string config field labels to new
+            json-serializable values.
+
+        :@return: the config dict after being serialized and reloaded
+        """
+        ## Get the current configuration and update it
+        cur_config = self.config
+        cur_config.update(update_dict)
+        ## Overwrite the json with the new version
+        json.dump(cur_config, self.path_config.open("w"))
+        ## reset the config and reload the json by returning the property
+        self._config = None
+        return self.config
 
 class ModelSet:
     @staticmethod
@@ -163,10 +192,8 @@ class ModelSet:
             subset = tuple(filter(lambda m:substr in m.name, subset))
         return ModelSet(subset, check_valid=check_valid)
 
-
 if __name__=="__main__":
     model_parent_dir = Path("data/models")
-    #MLs = [ModelLook(d) for d in model_parent_dir.iterdir() if d.is_dir()]
     MS = ModelSet.from_dir(model_parent_dir)
 
     is_masked = lambda m:all(
@@ -180,12 +207,11 @@ if __name__=="__main__":
     print([m.metric_labels for m in sub.models])
     print([list(m.config.keys()) for m in sub.models])
     print([list(m.metric_data.shape) for m in sub.models])
-    exit(0)
 
     metric_labels,metric_data = zip(*[
-        ml.load_prog(as_array=True) for ml in MLs
+        ml.load_prog(as_array=True) for ml in sub.models
         ])
-    configs = [ml._load_config() for ml in MLs]
+    configs = [ml._load_config() for ml in sub.models]
     metric_union = set(chain(*metric_labels))
     metric_intersection = [
             m for m in metric_union
