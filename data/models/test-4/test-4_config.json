@@ -1,0 +1,71 @@
+{
+    "model_name": "test-4",
+    "num_inputs": 4,
+    "num_outputs": 2,
+    "data_source": "data/AL_ASOS_July_2023.csv",
+    "input_feats": [
+        "tmpc",
+        "relh",
+        "sknt",
+        "mslp"
+    ],
+    "output_feats": [
+        "romps_LCL_m",
+        "lcl_estimate"
+    ],
+    "model_type": "vae",
+    "node_list": [
+        64,
+        32,
+        32,
+        32,
+        16,
+        16
+    ],
+    "dense_kwargs": {
+        "activation": "sigmoid"
+    },
+    "num_latent": 8,
+    "enc_node_list": [
+        128,
+        128,
+        128,
+        64,
+        32
+    ],
+    "dec_node_list": [
+        16,
+        16
+    ],
+    "dropout_rate": 0.1,
+    "batchnorm": true,
+    "enc_dense_kwargs": {
+        "activation": "relu"
+    },
+    "dec_dense_kwargs": {
+        "activation": "relu"
+    },
+    "learning_rate": 1e-05,
+    "loss": "mse",
+    "metrics": [
+        "mse",
+        "mae"
+    ],
+    "weighted_metrics": [
+        "mse",
+        "mae"
+    ],
+    "early_stop_metric": "val_mse",
+    "early_stop_patience": 30,
+    "save_weights_only": true,
+    "batch_size": 32,
+    "batch_buffer": 4,
+    "max_epochs": 128,
+    "val_frequency": 1,
+    "train_val_ratio": 0.8,
+    "mask_pct": 0.0,
+    "mask_pct_stdev": 0.2,
+    "mask_val": 0,
+    "mask_feat_probs": null,
+    "notes": "vae with only essential features and some zero-masking"
+}
