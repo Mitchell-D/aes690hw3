@@ -3,9 +3,10 @@ import tensorflow as tf
 from pathlib import Path
 
 import tracktrain.model_methods as mm
-from tracktrain.compile_and_train import compile_and_build_dir, train
-from preprocess import preprocess
+#from tracktrain.compile_and_train import compile_and_build_dir, train
 from tracktrain.VariationalEncoderDecoder import VariationalEncoderDecoder
+from tracktrain.ModelDir import ModelDir
+from tracktrain.compile_and_train import train
 
 def main():
     """ Directory with sub-directories for each model. """
@@ -18,61 +19,62 @@ def main():
     input_feats = ["tmpc","relh","sknt","mslp"]
     output_feats = ["romps_LCL_m","lcl_estimate"]
 
+    '''
     model_builders = {
-            "vae":VariationalEncoderDecoder,
+            "vae":VariationalEncoderDecoder.from_config,
             "ff":mm.feedforward,
             }
+    '''
 
     config = {
             ## Meta-info
-            "model_name":"test-7",
+            "model_name":"test-15",
             "num_inputs":len(input_feats),
             "num_outputs":len(output_feats),
             "data_source":asos_al_path.as_posix(),
             "input_feats":input_feats,
             "output_feats":output_feats,
-            "model_type":"vae",
+            "model_type":"ved",
+            "rand_seed":20240128,
 
             ## Exclusive to feedforward
-            "node_list":[64,32,32,32,16,16],
-            "dense_kwargs":{"activation":"sigmoid"},
+            "node_list":[1024,1024,512,512,256,256,128,128,64,16],
+            "dense_kwargs":{"activation":"relu"},
 
             ## Exclusive to variational encoder-decoder
-            "num_latent":6,
-            "enc_node_list":[128,128,128,64,32],
-            "dec_node_list":[6],
-            "dropout_rate":0.0,
-            "batchnorm":True,
+            "num_latent":8,
+            "enc_node_list":[1024,1024,512,512,256,256,128,128,64,16],
+            "dec_node_list":[16,64,128,64],
             "enc_dense_kwargs":{"activation":"relu"},
             "dec_dense_kwargs":{"activation":"relu"},
 
             ## Common to models
             "batchnorm":True,
-            "dropout_rate":0.1,
+            "dropout_rate":0.0,
 
             ## Exclusive to compile_and_build_dir
             "learning_rate":1e-5,
-            "loss":"mse",
+            "loss":"mae",
             "metrics":["mse", "mae"],
             "weighted_metrics":["mse", "mae"],
 
             ## Exclusive to train
             "early_stop_metric":"val_mse", ## metric evaluated for stagnation
-            "early_stop_patience":30, ## number of epochs before stopping
+            "early_stop_patience":600, ## number of epochs before stopping
             "save_weights_only":True,
-            "batch_size":32,
+            "batch_size":64,
             "batch_buffer":4,
-            "max_epochs":128, ## maximum number of epochs to train
+            "max_epochs":2048, ## maximum number of epochs to train
             "val_frequency":1, ## epochs between validation
 
             ## Exclusive to generator init
-            "train_val_ratio":.8,
+            "train_val_ratio":.9,
             "mask_pct":0.0,
-            "mask_pct_stdev":0.2,
-            "mask_val":0,
+            "mask_pct_stdev":0.0,
+            "mask_val":9999,
             "mask_feat_probs":None,
 
-            "notes":"No dropout, single-layer decoder, larger latent vector",
+            "notes":"enormous encoder ; moderate learning rate",
             }
 
     """
@@ -84,7 +86,9 @@ def main():
     "mask_val": Number substituted for masked features
     "mask_feat_probs": List of relative probabilities of each feat being masked
     """
-    ## Preprocess the data
+
+    ## Extract and preprocess the data
+    from preprocess import preprocess
     data_dict = preprocess(
             asos_csv_path=asos_al_path,
             input_feats=input_feats,
@@ -101,27 +105,38 @@ def main():
             mask_val=config.get("mask_val"),
             feat_probs=config.get("mask_feat_probs"),
             shuffle=True,
-            dtype=tf.float64
+            dtype=tf.float64,
+            rand_seed=config.get("random_seed"),
             )
     ## Initialize the model
-    model = model_builders.get(config.get("model_type"))(**config)
+    #model = model_builders.get(config.get("model_type"))(**config)
 
-    """ All the methods below from this module are model and data agnostic """
+    """
+    All the methods below (from tracktrain) are model and data agnostic
+    """
 
+    model,md = ModelDir.build_from_config(
+            config,
+            model_parent_dir=model_parent_dir,
+            print_summary=True
+            )
+    best_model = train(
+            model_dir_path=md.dir,
+            train_config=config,
+            compiled_model=model,
+            gen_training=gen_train,
+            gen_validation=gen_val,
+            )
+
+    '''
     ## Compile the model and build a directory for it
     model,model_dir = compile_and_build_dir(
             model=model,
             model_parent_dir=model_parent_dir,
             compile_config=config,
             )
-    best_model = train(
-            model_dir=model_dir,
-            train_config=config,
-            compiled_model=model,
-            gen_training=gen_train,
-            gen_validation=gen_val,
-            )
     print(f"Best model: {best_model.as_posix()}")
+    '''
 
 if __name__=="__main__":
     main()
