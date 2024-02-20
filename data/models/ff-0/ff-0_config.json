@@ -44,5 +44,8 @@
     "mask_val": 9999.0,
     "train_val_ratio": 0.65,
     "mask_feat_probs": null,
-    "notes": ""
+    "notes": "",
+    "model_type": "ff",
+    "num_inputs": 7,
+    "num_outputs": 2
 }

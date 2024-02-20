@@ -3,6 +3,21 @@
     "num_inputs": 8,
     "num_outputs": 2,
     "data_source": "data/AL_ASOS_July_2023.csv",
+    "model_type":"ff",
+    "input_feats": [
+        "tmpc",
+        "dwpc",
+        "relh",
+        "sknt",
+        "mslp",
+        "p01m",
+        "gust",
+        "feel"
+    ],
+    "output_feats":[
+        "romps_LCL_m",
+        "lcl_estimate"
+    ],
     "node_list": [
         64,
         32,

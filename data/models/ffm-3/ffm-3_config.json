@@ -49,5 +49,8 @@
     "mask_val": 9999.0,
     "train_val_ratio": 0.65,
     "mask_feat_probs": null,
-    "notes": "Moderate masking; added feels like"
+    "notes": "Moderate masking; added feels like",
+    "model_type": "ff",
+    "num_inputs": 8,
+    "num_outputs": 2
 }
