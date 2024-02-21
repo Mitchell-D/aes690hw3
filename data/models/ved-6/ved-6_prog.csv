@@ -1,2 +1,0 @@
-epoch,mae,mse,val_loss,val_mae,val_mse,val_weighted_mae,val_weighted_mse,weighted_mae,weighted_mse
-0,nan,nan,0.0,nan,nan,nan,nan,nan,nan
