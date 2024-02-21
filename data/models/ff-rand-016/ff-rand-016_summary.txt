@@ -1,0 +1,55 @@
+Model: "model_16"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input (InputLayer)          [(None, 4)]               0         
+                                                                 
+ ff-rand-016_dense_0 (Dense  (None, 64)                320       
+ )                                                               
+                                                                 
+ ff-rand-016_bnorm_0 (Batch  (None, 64)                256       
+ Normalization)                                                  
+                                                                 
+ ff-rand-016_dense_1 (Dense  (None, 64)                4160      
+ )                                                               
+                                                                 
+ ff-rand-016_bnorm_1 (Batch  (None, 64)                256       
+ Normalization)                                                  
+                                                                 
+ ff-rand-016_dense_2 (Dense  (None, 64)                4160      
+ )                                                               
+                                                                 
+ ff-rand-016_bnorm_2 (Batch  (None, 64)                256       
+ Normalization)                                                  
+                                                                 
+ ff-rand-016_dense_3 (Dense  (None, 32)                2080      
+ )                                                               
+                                                                 
+ ff-rand-016_bnorm_3 (Batch  (None, 32)                128       
+ Normalization)                                                  
+                                                                 
+ ff-rand-016_dense_4 (Dense  (None, 32)                1056      
+ )                                                               
+                                                                 
+ ff-rand-016_bnorm_4 (Batch  (None, 32)                128       
+ Normalization)                                                  
+                                                                 
+ ff-rand-016_dense_5 (Dense  (None, 32)                1056      
+ )                                                               
+                                                                 
+ ff-rand-016_bnorm_5 (Batch  (None, 32)                128       
+ Normalization)                                                  
+                                                                 
+ ff-rand-016_dense_6 (Dense  (None, 16)                528       
+ )                                                               
+                                                                 
+ ff-rand-016_bnorm_6 (Batch  (None, 16)                64        
+ Normalization)                                                  
+                                                                 
+ output (Dense)              (None, 2)                 34        
+                                                                 
+=================================================================
+Total params: 14610 (57.07 KB)
+Trainable params: 14002 (54.70 KB)
+Non-trainable params: 608 (2.38 KB)
+_________________________________________________________________

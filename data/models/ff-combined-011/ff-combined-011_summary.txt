@@ -1,0 +1,93 @@
+Model: "model_11"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input (InputLayer)          [(None, 4)]               0         
+                                                                 
+ ff-combined-011_dense_0 (D  (None, 256)               1280      
+ ense)                                                           
+                                                                 
+ ff-combined-011_bnorm_0 (B  (None, 256)               1024      
+ atchNormalization)                                              
+                                                                 
+ dropout_46 (Dropout)        (None, 256)               0         
+                                                                 
+ ff-combined-011_dense_1 (D  (None, 256)               65792     
+ ense)                                                           
+                                                                 
+ ff-combined-011_bnorm_1 (B  (None, 256)               1024      
+ atchNormalization)                                              
+                                                                 
+ dropout_47 (Dropout)        (None, 256)               0         
+                                                                 
+ ff-combined-011_dense_2 (D  (None, 256)               65792     
+ ense)                                                           
+                                                                 
+ ff-combined-011_bnorm_2 (B  (None, 256)               1024      
+ atchNormalization)                                              
+                                                                 
+ dropout_48 (Dropout)        (None, 256)               0         
+                                                                 
+ ff-combined-011_dense_3 (D  (None, 64)                16448     
+ ense)                                                           
+                                                                 
+ ff-combined-011_bnorm_3 (B  (None, 64)                256       
+ atchNormalization)                                              
+                                                                 
+ dropout_49 (Dropout)        (None, 64)                0         
+                                                                 
+ ff-combined-011_dense_4 (D  (None, 64)                4160      
+ ense)                                                           
+                                                                 
+ ff-combined-011_bnorm_4 (B  (None, 64)                256       
+ atchNormalization)                                              
+                                                                 
+ dropout_50 (Dropout)        (None, 64)                0         
+                                                                 
+ ff-combined-011_dense_5 (D  (None, 64)                4160      
+ ense)                                                           
+                                                                 
+ ff-combined-011_bnorm_5 (B  (None, 64)                256       
+ atchNormalization)                                              
+                                                                 
+ dropout_51 (Dropout)        (None, 64)                0         
+                                                                 
+ ff-combined-011_dense_6 (D  (None, 32)                2080      
+ ense)                                                           
+                                                                 
+ ff-combined-011_bnorm_6 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ dropout_52 (Dropout)        (None, 32)                0         
+                                                                 
+ ff-combined-011_dense_7 (D  (None, 32)                1056      
+ ense)                                                           
+                                                                 
+ ff-combined-011_bnorm_7 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ dropout_53 (Dropout)        (None, 32)                0         
+                                                                 
+ ff-combined-011_dense_8 (D  (None, 32)                1056      
+ ense)                                                           
+                                                                 
+ ff-combined-011_bnorm_8 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ dropout_54 (Dropout)        (None, 32)                0         
+                                                                 
+ ff-combined-011_dense_9 (D  (None, 16)                528       
+ ense)                                                           
+                                                                 
+ ff-combined-011_bnorm_9 (B  (None, 16)                64        
+ atchNormalization)                                              
+                                                                 
+ dropout_55 (Dropout)        (None, 16)                0         
+                                                                 
+ output (Dense)              (None, 2)                 34        
+                                                                 
+=================================================================
+Total params: 166674 (651.07 KB)
+Trainable params: 164530 (642.70 KB)
+Non-trainable params: 2144 (8.38 KB)
+_________________________________________________________________

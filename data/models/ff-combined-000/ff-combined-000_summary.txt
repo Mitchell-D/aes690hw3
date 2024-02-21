@@ -1,0 +1,31 @@
+Model: "model"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input (InputLayer)          [(None, 4)]               0         
+                                                                 
+ ff-combined-000_dense_0 (D  (None, 32)                160       
+ ense)                                                           
+                                                                 
+ ff-combined-000_bnorm_0 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ ff-combined-000_dense_1 (D  (None, 32)                1056      
+ ense)                                                           
+                                                                 
+ ff-combined-000_bnorm_1 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ ff-combined-000_dense_2 (D  (None, 16)                528       
+ ense)                                                           
+                                                                 
+ ff-combined-000_bnorm_2 (B  (None, 16)                64        
+ atchNormalization)                                              
+                                                                 
+ output (Dense)              (None, 2)                 34        
+                                                                 
+=================================================================
+Total params: 2098 (8.20 KB)
+Trainable params: 1938 (7.57 KB)
+Non-trainable params: 160 (640.00 Byte)
+_________________________________________________________________

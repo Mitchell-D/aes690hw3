@@ -1,0 +1,73 @@
+Model: "model_19"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input (InputLayer)          [(None, 4)]               0         
+                                                                 
+ ff-combined-019_dense_0 (D  (None, 16)                80        
+ ense)                                                           
+                                                                 
+ ff-combined-019_bnorm_0 (B  (None, 16)                64        
+ atchNormalization)                                              
+                                                                 
+ ff-combined-019_dense_1 (D  (None, 32)                544       
+ ense)                                                           
+                                                                 
+ ff-combined-019_bnorm_1 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ ff-combined-019_dense_2 (D  (None, 32)                1056      
+ ense)                                                           
+                                                                 
+ ff-combined-019_bnorm_2 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ ff-combined-019_dense_3 (D  (None, 32)                1056      
+ ense)                                                           
+                                                                 
+ ff-combined-019_bnorm_3 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ ff-combined-019_dense_4 (D  (None, 64)                2112      
+ ense)                                                           
+                                                                 
+ ff-combined-019_bnorm_4 (B  (None, 64)                256       
+ atchNormalization)                                              
+                                                                 
+ ff-combined-019_dense_5 (D  (None, 64)                4160      
+ ense)                                                           
+                                                                 
+ ff-combined-019_bnorm_5 (B  (None, 64)                256       
+ atchNormalization)                                              
+                                                                 
+ ff-combined-019_dense_6 (D  (None, 64)                4160      
+ ense)                                                           
+                                                                 
+ ff-combined-019_bnorm_6 (B  (None, 64)                256       
+ atchNormalization)                                              
+                                                                 
+ ff-combined-019_dense_7 (D  (None, 256)               16640     
+ ense)                                                           
+                                                                 
+ ff-combined-019_bnorm_7 (B  (None, 256)               1024      
+ atchNormalization)                                              
+                                                                 
+ ff-combined-019_dense_8 (D  (None, 256)               65792     
+ ense)                                                           
+                                                                 
+ ff-combined-019_bnorm_8 (B  (None, 256)               1024      
+ atchNormalization)                                              
+                                                                 
+ ff-combined-019_dense_9 (D  (None, 256)               65792     
+ ense)                                                           
+                                                                 
+ ff-combined-019_bnorm_9 (B  (None, 256)               1024      
+ atchNormalization)                                              
+                                                                 
+ output (Dense)              (None, 2)                 514       
+                                                                 
+=================================================================
+Total params: 166194 (649.20 KB)
+Trainable params: 164050 (640.82 KB)
+Non-trainable params: 2144 (8.38 KB)
+_________________________________________________________________

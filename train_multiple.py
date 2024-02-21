@@ -14,7 +14,8 @@ from tracktrain.ModelDir import ModelDir
 from tracktrain.compile_and_train import train
 
 data_dir = Path("data")
-asos_path = data_dir.joinpath("AL_ASOS_July_2023.csv")
+#asos_path = data_dir.joinpath("AL_ASOS_July_2023.csv")
+asos_path = data_dir.joinpath("ASOS_combined.csv")
 model_parent_dir = data_dir.joinpath("models")
 #asos_path = data_dir.joinpath("UT_ASOS_Mar_2023.csv")
 
@@ -90,7 +91,7 @@ to fully search. In order to evaluate a wide variety of possible hyper-
 """
 
 num_samples = 32
-model_base_name = "ff-rand"
+model_base_name = "ff-combined"
 variations = {
         "dropout_rate":(0.0,0.1,0.2,0.4),
         "learning_rate":(1e-6,1e-4,1e-2),

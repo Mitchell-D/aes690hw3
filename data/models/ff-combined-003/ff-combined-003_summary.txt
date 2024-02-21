@@ -1,0 +1,53 @@
+Model: "model_3"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input (InputLayer)          [(None, 4)]               0         
+                                                                 
+ ff-combined-003_dense_0 (D  (None, 16)                80        
+ ense)                                                           
+                                                                 
+ ff-combined-003_bnorm_0 (B  (None, 16)                64        
+ atchNormalization)                                              
+                                                                 
+ dropout_10 (Dropout)        (None, 16)                0         
+                                                                 
+ ff-combined-003_dense_1 (D  (None, 32)                544       
+ ense)                                                           
+                                                                 
+ ff-combined-003_bnorm_1 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ dropout_11 (Dropout)        (None, 32)                0         
+                                                                 
+ ff-combined-003_dense_2 (D  (None, 32)                1056      
+ ense)                                                           
+                                                                 
+ ff-combined-003_bnorm_2 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ dropout_12 (Dropout)        (None, 32)                0         
+                                                                 
+ ff-combined-003_dense_3 (D  (None, 64)                2112      
+ ense)                                                           
+                                                                 
+ ff-combined-003_bnorm_3 (B  (None, 64)                256       
+ atchNormalization)                                              
+                                                                 
+ dropout_13 (Dropout)        (None, 64)                0         
+                                                                 
+ ff-combined-003_dense_4 (D  (None, 64)                4160      
+ ense)                                                           
+                                                                 
+ ff-combined-003_bnorm_4 (B  (None, 64)                256       
+ atchNormalization)                                              
+                                                                 
+ dropout_14 (Dropout)        (None, 64)                0         
+                                                                 
+ output (Dense)              (None, 2)                 130       
+                                                                 
+=================================================================
+Total params: 8914 (34.82 KB)
+Trainable params: 8498 (33.20 KB)
+Non-trainable params: 416 (1.62 KB)
+_________________________________________________________________

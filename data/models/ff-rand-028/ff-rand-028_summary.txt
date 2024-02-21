@@ -1,0 +1,69 @@
+Model: "model_28"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input (InputLayer)          [(None, 4)]               0         
+                                                                 
+ ff-rand-028_dense_0 (Dense  (None, 16)                80        
+ )                                                               
+                                                                 
+ ff-rand-028_bnorm_0 (Batch  (None, 16)                64        
+ Normalization)                                                  
+                                                                 
+ dropout_113 (Dropout)       (None, 16)                0         
+                                                                 
+ ff-rand-028_dense_1 (Dense  (None, 32)                544       
+ )                                                               
+                                                                 
+ ff-rand-028_bnorm_1 (Batch  (None, 32)                128       
+ Normalization)                                                  
+                                                                 
+ dropout_114 (Dropout)       (None, 32)                0         
+                                                                 
+ ff-rand-028_dense_2 (Dense  (None, 32)                1056      
+ )                                                               
+                                                                 
+ ff-rand-028_bnorm_2 (Batch  (None, 32)                128       
+ Normalization)                                                  
+                                                                 
+ dropout_115 (Dropout)       (None, 32)                0         
+                                                                 
+ ff-rand-028_dense_3 (Dense  (None, 32)                1056      
+ )                                                               
+                                                                 
+ ff-rand-028_bnorm_3 (Batch  (None, 32)                128       
+ Normalization)                                                  
+                                                                 
+ dropout_116 (Dropout)       (None, 32)                0         
+                                                                 
+ ff-rand-028_dense_4 (Dense  (None, 64)                2112      
+ )                                                               
+                                                                 
+ ff-rand-028_bnorm_4 (Batch  (None, 64)                256       
+ Normalization)                                                  
+                                                                 
+ dropout_117 (Dropout)       (None, 64)                0         
+                                                                 
+ ff-rand-028_dense_5 (Dense  (None, 64)                4160      
+ )                                                               
+                                                                 
+ ff-rand-028_bnorm_5 (Batch  (None, 64)                256       
+ Normalization)                                                  
+                                                                 
+ dropout_118 (Dropout)       (None, 64)                0         
+                                                                 
+ ff-rand-028_dense_6 (Dense  (None, 64)                4160      
+ )                                                               
+                                                                 
+ ff-rand-028_bnorm_6 (Batch  (None, 64)                256       
+ Normalization)                                                  
+                                                                 
+ dropout_119 (Dropout)       (None, 64)                0         
+                                                                 
+ output (Dense)              (None, 2)                 130       
+                                                                 
+=================================================================
+Total params: 14514 (56.70 KB)
+Trainable params: 13906 (54.32 KB)
+Non-trainable params: 608 (2.38 KB)
+_________________________________________________________________

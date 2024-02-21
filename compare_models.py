@@ -81,7 +81,7 @@ def main():
     ms = ModelSet.from_dir(model_parent_dir)
 
     ## Only variational autoencoders
-    sub = ms.subset(rule=lambda m:"model_type" in m.config.keys())
+    #sub = ms.subset(rule=lambda m:"model_type" in m.config.keys())
     ## Subset to models that take specific features
     #flabels = {"tmpc", "dwpc", "relh", "sknt", "mslp", "p01m", "gust", "feel"}
     #flabels = {'tmpc', 'relh', 'sknt', 'mslp'}
@@ -90,6 +90,7 @@ def main():
     #sub = ms.subset(rule=lambda m:not m.config.get("model_type") is None)
     #sub = ms.subset(rule=lambda m:m.config.get("model_type") is None)
     #sub = ms.subset(rule=lambda m:m.config.get("model_type") == "ved")
+    sub = ms.subset(rule=lambda m:"rand" in m.name)
 
     """
     ## Routine for modifying the config file

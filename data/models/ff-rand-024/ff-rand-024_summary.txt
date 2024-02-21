@@ -1,0 +1,53 @@
+Model: "model_24"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input (InputLayer)          [(None, 4)]               0         
+                                                                 
+ ff-rand-024_dense_0 (Dense  (None, 16)                80        
+ )                                                               
+                                                                 
+ ff-rand-024_bnorm_0 (Batch  (None, 16)                64        
+ Normalization)                                                  
+                                                                 
+ dropout_102 (Dropout)       (None, 16)                0         
+                                                                 
+ ff-rand-024_dense_1 (Dense  (None, 32)                544       
+ )                                                               
+                                                                 
+ ff-rand-024_bnorm_1 (Batch  (None, 32)                128       
+ Normalization)                                                  
+                                                                 
+ dropout_103 (Dropout)       (None, 32)                0         
+                                                                 
+ ff-rand-024_dense_2 (Dense  (None, 32)                1056      
+ )                                                               
+                                                                 
+ ff-rand-024_bnorm_2 (Batch  (None, 32)                128       
+ Normalization)                                                  
+                                                                 
+ dropout_104 (Dropout)       (None, 32)                0         
+                                                                 
+ ff-rand-024_dense_3 (Dense  (None, 64)                2112      
+ )                                                               
+                                                                 
+ ff-rand-024_bnorm_3 (Batch  (None, 64)                256       
+ Normalization)                                                  
+                                                                 
+ dropout_105 (Dropout)       (None, 64)                0         
+                                                                 
+ ff-rand-024_dense_4 (Dense  (None, 64)                4160      
+ )                                                               
+                                                                 
+ ff-rand-024_bnorm_4 (Batch  (None, 64)                256       
+ Normalization)                                                  
+                                                                 
+ dropout_106 (Dropout)       (None, 64)                0         
+                                                                 
+ output (Dense)              (None, 2)                 130       
+                                                                 
+=================================================================
+Total params: 8914 (34.82 KB)
+Trainable params: 8498 (33.20 KB)
+Non-trainable params: 416 (1.62 KB)
+_________________________________________________________________

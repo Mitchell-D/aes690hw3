@@ -1,0 +1,69 @@
+Model: "model_5"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input (InputLayer)          [(None, 4)]               0         
+                                                                 
+ ff-combined-005_dense_0 (D  (None, 16)                80        
+ ense)                                                           
+                                                                 
+ ff-combined-005_bnorm_0 (B  (None, 16)                64        
+ atchNormalization)                                              
+                                                                 
+ dropout_18 (Dropout)        (None, 16)                0         
+                                                                 
+ ff-combined-005_dense_1 (D  (None, 32)                544       
+ ense)                                                           
+                                                                 
+ ff-combined-005_bnorm_1 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ dropout_19 (Dropout)        (None, 32)                0         
+                                                                 
+ ff-combined-005_dense_2 (D  (None, 32)                1056      
+ ense)                                                           
+                                                                 
+ ff-combined-005_bnorm_2 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ dropout_20 (Dropout)        (None, 32)                0         
+                                                                 
+ ff-combined-005_dense_3 (D  (None, 32)                1056      
+ ense)                                                           
+                                                                 
+ ff-combined-005_bnorm_3 (B  (None, 32)                128       
+ atchNormalization)                                              
+                                                                 
+ dropout_21 (Dropout)        (None, 32)                0         
+                                                                 
+ ff-combined-005_dense_4 (D  (None, 64)                2112      
+ ense)                                                           
+                                                                 
+ ff-combined-005_bnorm_4 (B  (None, 64)                256       
+ atchNormalization)                                              
+                                                                 
+ dropout_22 (Dropout)        (None, 64)                0         
+                                                                 
+ ff-combined-005_dense_5 (D  (None, 64)                4160      
+ ense)                                                           
+                                                                 
+ ff-combined-005_bnorm_5 (B  (None, 64)                256       
+ atchNormalization)                                              
+                                                                 
+ dropout_23 (Dropout)        (None, 64)                0         
+                                                                 
+ ff-combined-005_dense_6 (D  (None, 64)                4160      
+ ense)                                                           
+                                                                 
+ ff-combined-005_bnorm_6 (B  (None, 64)                256       
+ atchNormalization)                                              
+                                                                 
+ dropout_24 (Dropout)        (None, 64)                0         
+                                                                 
+ output (Dense)              (None, 2)                 130       
+                                                                 
+=================================================================
+Total params: 14514 (56.70 KB)
+Trainable params: 13906 (54.32 KB)
+Non-trainable params: 608 (2.38 KB)
+_________________________________________________________________

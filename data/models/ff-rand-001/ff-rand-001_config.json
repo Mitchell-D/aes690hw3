@@ -1,0 +1,86 @@
+{
+    "num_inputs": 4,
+    "num_outputs": 2,
+    "data_source": "data/AL_ASOS_July_2023.csv",
+    "input_feats": [
+        "tmpc",
+        "relh",
+        "sknt",
+        "mslp"
+    ],
+    "output_feats": [
+        "romps_LCL_m",
+        "lcl_estimate"
+    ],
+    "model_type": "ff",
+    "rand_seed": 20240128,
+    "batchnorm": true,
+    "loss": "mse",
+    "metrics": [
+        "mse",
+        "mae"
+    ],
+    "weighted_metrics": [
+        "mse",
+        "mae"
+    ],
+    "early_stop_metric": "val_mse",
+    "early_stop_patience": 64,
+    "save_weights_only": true,
+    "batch_size": 64,
+    "batch_buffer": 4,
+    "max_epochs": 2048,
+    "val_frequency": 1,
+    "train_val_ratio": 0.8,
+    "mask_pct": 0.3,
+    "mask_pct_stdev": 0.1,
+    "mask_val": 9999,
+    "mask_feat_probs": null,
+    "notes": "",
+    "dropout_rate": 0.4,
+    "learning_rate": 0.01,
+    "node_list": [
+        256,
+        256,
+        256,
+        64,
+        64,
+        64,
+        32,
+        32,
+        32,
+        16
+    ],
+    "dense_kwargs": {
+        "activation": "tanh"
+    },
+    "num_latent": 4,
+    "enc_node_list": [
+        256,
+        256,
+        256,
+        64,
+        64,
+        64,
+        32,
+        32,
+        32,
+        16
+    ],
+    "dec_node_list": [
+        16,
+        32,
+        32,
+        32,
+        64,
+        64,
+        64
+    ],
+    "enc_dense_kwargs": {
+        "activation": "sigmoid"
+    },
+    "dec_dense_kwargs": {
+        "activation": "sigmoid"
+    },
+    "model_name": "ff-rand-001"
+}
