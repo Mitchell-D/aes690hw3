@@ -77,24 +77,26 @@ def main():
     model_parent_dir = data_dir.joinpath("models")
     asos_al_path = data_dir.joinpath("AL_ASOS_July_2023.csv")
     asos_ut_path = data_dir.joinpath("UT_ASOS_Mar_2023.csv")
+    asos_combined_path = data_dir.joinpath("ASOS_combined.csv")
+    asos_path = asos_combined_path
 
-    ms = ModelSet.from_dir(model_parent_dir)
+    sub = ModelSet.from_dir(model_parent_dir)
 
     ## Only variational autoencoders
-    #sub = ms.subset(rule=lambda m:"model_type" in m.config.keys())
+    #sub = sub.subset(rule=lambda m:"model_type" in m.config.keys())
     ## Subset to models that take specific features
     #flabels = {"tmpc", "dwpc", "relh", "sknt", "mslp", "p01m", "gust", "feel"}
     #flabels = {'tmpc', 'relh', 'sknt', 'mslp'}
-    #sub = ms.subset(
+    #sub = sub.subset(
     #        rule=lambda m:set(m.config.get("input_feats")) == set(flabels))
-    #sub = ms.subset(rule=lambda m:not m.config.get("model_type") is None)
-    #sub = ms.subset(rule=lambda m:m.config.get("model_type") is None)
-    #sub = ms.subset(rule=lambda m:m.config.get("model_type") == "ved")
-    sub = ms.subset(rule=lambda m:"rand" in m.name)
+    #sub = sub.subset(rule=lambda m:not m.config.get("model_type") is None)
+    #sub = sub.subset(rule=lambda m:m.config.get("model_type") is None)
+    #sub = sub.subset(rule=lambda m:m.config.get("model_type") == "ved")
+    #sub = sub.subset(rule=lambda m:"rand" in m.name)
 
     """
     ## Routine for modifying the config file
-    sub = ms.subset(rule=lambda m:m.config.get("model_type") == "ff")
+    sub = sub.subset(rule=lambda m:m.config.get("model_type") == "ff")
     for md in sub.model_dirs:
         print(md.name, [l for l in md.config.keys() if "num_" in l])
     exit(0)
@@ -109,7 +111,7 @@ def main():
     '''
     eval_models(
             model_set=sub,
-            asos_csv_path=asos_al_path,
+            asos_csv_path=asos_path,
             rand_seed=20240128,
             )
 if __name__=="__main__":
