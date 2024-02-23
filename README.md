@@ -3,6 +3,10 @@
 Neural networks for estimating LCL height given basic surface
 meteorological data from ASOS monthly CSVs.
 
+<p align="center">
+  <img height="256" src="https://github.com/Mitchell-D/aes690hw3/blob/main/report/figs/val_ff-combined-01_combined.png" />
+</p>
+
 ## dependencies
 
  - tracktrain
@@ -31,8 +35,29 @@ and report R^2 and mean absolute error metrics for the predictions.
 
 ## training models
 
+Before training, the data must be extracted and normalized.
+`preprocess.py` abstracts this into a single method that returns a
+dict of normalized data arrays with a last dimensions of "X" inputs
+and "Y" outputs ordered to correspond with the user-provided lists of
+field labels.
+
 The models in this exercise were trained using the [tracktrain][1]
 framework I've been developing to organize and generalize the process
-of model fitting and evaluation. `train_one.py`
+of model fitting and evaluation. `train_one.py` implements the
+workflow to train one model at a time as follows:
+
+1. Defining a valid configuration.
+2. Preprocessing the data and initializing generators.
+4. Creating a model dir with `tracktrain.ModelDir.build_from_config`.
+5. Training with `tracktrain.compile_and_train.build_from_config`.
+
+`train_multiple.py` extends this process to facilitate a random
+search of user-defined sets of plausible hyperparameters.
+
+Once a variety of models have been trained, `compare_models.py` is
+used to specify subsets of models according to their configurations,
+then to evaluate the models by calculating bulk statistics from new
+datasets, and generating validation curves.
+
 
 [1]:https://github.com/Mitchell-D/tracktrain
