@@ -7,11 +7,9 @@ from sklearn.metrics import r2_score
 from preprocess import preprocess
 
 ## Define the paths to the model and input CSV
-#model = tf.keras.models.load_model("data/dodson_ff-rand-014.keras")
-model = tf.keras.models.load_model("data/dodson_ff-combined-019.keras")
-#asos_csv_path = Path("data/UT_ASOS_Mar_2023.csv")
-#asos_csv_path = Path("data/AL_ASOS_July_2023.csv")
-asos_csv_path = Path("data/ASOS_combined.csv")
+asos_csv_path = Path("data/UT_ASOS_Mar_2023.csv")
+model_path = Path("data/dodson_ff-alabama.keras") ## trained on AL
+#model_path = Path("data/dodson_ff-combined.keras") ## trained on combined
 
 ## Extract and preprocess the data in an order determined by the features lists
 data_dict = preprocess(
@@ -20,10 +18,12 @@ data_dict = preprocess(
         output_feats=["romps_LCL_m", "lcl_estimate"],
         normalize=True,
         )
+
 X = data_dict["X"]
 Y = data_dict["Y"]
 
 ## Run the model and rescale the values to data coordinates
+model = tf.keras.models.load_model(model_path)
 P = model(X)
 P = P*data_dict["y_stdevs"]+data_dict["y_means"]
 Y = Y*data_dict["y_stdevs"]+data_dict["y_means"]
