@@ -46,10 +46,12 @@ framework I've been developing to organize and generalize the process
 of model fitting and evaluation. `train_one.py` implements the
 workflow to train one model at a time as follows:
 
-1. Defining a valid configuration.
-2. Preprocessing the data and initializing generators.
-4. Creating a model dir with `tracktrain.ModelDir.build_from_config`.
-5. Training with `tracktrain.compile_and_train.build_from_config`.
+1. Defining a valid configuration according to `tracktrain.config`.
+2. Preprocessing the data, then initializing generators with
+   `tracktrain.model_methods.array_to_noisy_tv_gen`.
+4. Compiling the model and creating a model directory with
+   `tracktrain.ModelDir.build_from_config`.
+6. Training the model with `tracktrain.compile_and_train.train`.
 
 `train_multiple.py` extends this process to facilitate a random
 search of user-defined sets of plausible hyperparameters.
