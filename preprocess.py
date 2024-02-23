@@ -72,7 +72,7 @@ def get_norm_coeffs(data):
 def preprocess(asos_csv_path:Path, input_feats:list, output_feats:list,
                pkl_path:Path=None, normalize=False):
     """
-    Preprocess an ASOS monthly csv file to
+    Preprocess and optionally normalize an ASOS monthly csv file into a dict.
     """
     ## Always load the station name and acquisition time
     default_fields = ["station", "valid"]
